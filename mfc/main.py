@@ -1,9 +1,7 @@
 """
 메인 실행 파일
-Main Execution File
 
-이 파일은 모든 분석 모듈을 임포트하고 순차적으로 실행합니다.
-This file imports all analysis modules and executes them sequentially.
+이 파일은 모든 분석 모듈을 임포트하고 순차적으로 실행한다
 """
 
 from pathlib import Path

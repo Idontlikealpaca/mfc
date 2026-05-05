@@ -1,11 +1,8 @@
 """
 분석 4: TDS-전압 상관관계 및 총 에너지 분석 모듈
-Analysis 4: TDS-Voltage Correlation and Total Energy Analysis Module
 
 이 모듈은 TDS와 전압 사이의 상관관계를 분석하고,
-사다리꼴 적분법을 사용하여 총 발전량을 계산합니다.
-This module analyzes the correlation between TDS and voltage,
-and calculates total energy generation using trapezoidal integration.
+사다리꼴 적분법을 사용하여 총 발전량을 계산한다
 """
 
 import numpy as np

@@ -1,11 +1,8 @@
 """
 분석 5: 전극 효율성 비교 모듈
-Analysis 5: Electrode Efficiency Comparison Module
 
 이 모듈은 알루미늄과 흑연 전극의 효율성을 통계적으로 비교하고,
-막대 차트와 산점도를 통해 시각화합니다.
-This module statistically compares the efficiency of aluminum and graphite electrodes,
-and visualizes them through bar charts and scatter plots.
+막대 차트와 산점도를 통해 시각화한다
 """
 
 import numpy as np

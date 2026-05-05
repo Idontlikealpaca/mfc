@@ -1,11 +1,8 @@
 """
 분석 1: 분산형 vs 중앙집중식 시스템 비교 모듈
-Analysis 1: Distributed vs Centralized System Comparison Module
 
 이 모듈은 MFC 기반 분산형 폐수 처리 시스템과
-기존 중앙집중식 활성슬러지 공법을 에너지·비용 측면에서 비교합니다.
-This module compares distributed MFC-based wastewater treatment systems
-with conventional centralized activated sludge processes in terms of energy and cost.
+기존 중앙집중식 활성슬러지 공법을 에너지·비용 측면에서 비교한다
 """
 
 import numpy as np

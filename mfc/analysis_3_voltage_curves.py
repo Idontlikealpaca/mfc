@@ -1,9 +1,7 @@
 """
 분석 3: 전압 상승 곡선 분석 모듈
-Analysis 3: Voltage Rise Curve Analysis Module
 
-이 모듈은 알루미늄과 흑연 전극의 전압 상승 곡선을 분석합니다.
-This module analyzes voltage rise curves for aluminum and graphite electrodes.
+이 모듈은 알루미늄과 흑연 전극의 전압 상승 곡선을 분석한다
 """
 
 import numpy as np
