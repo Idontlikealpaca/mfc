@@ -15,7 +15,6 @@ from config import COLORS, FIGURES_DIR
 def analyze_distributed_vs_centralized(df_c):
     """
     분산형 vs 중앙집중식 시스템 비교 분석 메인 함수
-    Main function for distributed vs centralized system comparison analysis
 
     Parameters:
     df_c (DataFrame): 흑연 데이터 / Graphite data
