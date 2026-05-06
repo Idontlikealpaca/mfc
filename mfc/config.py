@@ -57,7 +57,7 @@ plt.rcParams.update(
     }
 )
 
-# 폰트 캐시 강제 리프레시 (선택사항)
+# 폰트 캐시 강제 리프레시 
 try:
     fm._load_fontmanager(try_read_cache=False)
 except Exception:
