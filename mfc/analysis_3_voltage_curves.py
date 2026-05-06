@@ -19,9 +19,9 @@ def _aic(n, rss, k):
     Calculate Akaike Information Criterion
 
     Parameters:
-    n (int): 데이터 포인트 수 / Number of data points
-    rss (float): 잔차 제곱합 / Residual sum of squares
-    k (int): 파라미터 수 / Number of parameters
+    n (int): 데이터 포인트 수
+    rss (float): 잔차 제곱합
+    k (int): 파라미터 수 
 
     Returns:
     float: AIC 값 / AIC value
@@ -51,18 +51,17 @@ def _r_squared(y, y_fit):
 def _fit_models(x, y):
     """
     다양한 모델을 데이터에 적합시키고 평가
-    Fit various models to data and evaluate them
-
+    
     Parameters:
-    x (array): x 값들 / x values
-    y (array): y 값들 / y values
+    x (array): x 값들 
+    y (array): y 값들 
 
     Returns:
-    dict: 모델 결과들 / Model results
+    dict: 모델 결과들 
     """
     models = {}
 
-    # 2차 다항식 / Quadratic polynomial
+    # 2차 다항식 
     try:
         coeffs2 = np.polyfit(x, y, 2)
         y_fit2 = np.polyval(coeffs2, x)
@@ -78,7 +77,7 @@ def _fit_models(x, y):
     except Exception:
         pass
 
-    # 3차 다항식 / Cubic polynomial
+    # 3차 다항식 
     if len(x) >= 5:
         try:
             coeffs3 = np.polyfit(x, y, 3)
@@ -95,7 +94,7 @@ def _fit_models(x, y):
         except Exception:
             pass
 
-    # 지수 성장 함수: a*(1-exp(-b*x))+c / Exponential growth function: a*(1-exp(-b*x))+c
+    # 지수 성장 함수: a*(1-exp(-b*x))+c 
     if len(x) >= 4:
         def exp_growth(xv, a, b, c):
             return a * (1 - np.exp(-b * xv)) + c
@@ -122,17 +121,16 @@ def _fit_models(x, y):
 def _plot_voltage_curve(df, df_anomaly, electrode_label, color, fname):
     """
     전압 곡선 플롯팅 및 모델 적합
-    Plot voltage curve and fit models
-
+	
     Parameters:
-    df (DataFrame): 정상 데이터 / Normal data
-    df_anomaly (DataFrame): 이상치 데이터 / Anomaly data
-    electrode_label (str): 전극 라벨 / Electrode label
-    color (str): 색상 / Color
-    fname (str): 파일명 / Filename
+    df (DataFrame): 정상 데이터 
+    df_anomaly (DataFrame): 이상치 데이터 
+    electrode_label (str): 전극 라벨 
+    color (str): 색상 
+    fname (str): 파일명 
 
     Returns:
-    dict: 모델 결과들 / Model results
+    dict: 모델 결과들 
     """
     x_normal = df["elapsed_hours"].values
     y_normal = df["voltage_mV"].values
@@ -146,22 +144,22 @@ def _plot_voltage_curve(df, df_anomaly, electrode_label, color, fname):
 
     fig, ax = plt.subplots(figsize=(10, 6))
 
-    # 적합 곡선 + 신뢰 구간 / Fitted curve + confidence interval
+    # 적합 곡선 + 신뢰 구간 
     x_fine = np.linspace(x_normal.min(), x_normal.max(), 300)
     y_fine = best["predict"](x_fine)
     ax.plot(x_fine, y_fine, color=color, linewidth=2,
             label=f"최적 모델: {best['label']}\nR²={best['r2']:.3f}, AIC={best['aic']:.2f}")
 
-    # 정상 데이터 점 / Normal data points
+    # 정상 데이터 점 
     ax.scatter(x_normal, y_normal, color=color, s=80, zorder=5, edgecolors="white", linewidths=1, label="측정값")
 
-    # 이상치 점 / Anomaly points
+    # 이상치 점 
     if df_anomaly is not None and len(df_anomaly) > 0:
         ax.scatter(df_anomaly["elapsed_hours"], df_anomaly["voltage_mV"],
                    color=COLORS["anomaly"], s=100, zorder=6, marker="X",
                    edgecolors="white", linewidths=1, label="이상치 (Anomaly)")
-
-    # 각 점에 레이블 추가 / Add labels to each point
+                
+    # 각 점에 레이블 추가 
     all_pts = df if df_anomaly is None else pd.concat([df, df_anomaly])
     for _, row in all_pts.iterrows():
         exp_short = row["experiment_id"].split("_")[-1] + f"-{int(row['replicate'])}"
@@ -174,7 +172,7 @@ def _plot_voltage_curve(df, df_anomaly, electrode_label, color, fname):
     ax.set_title(f"{electrode_label} 전극 전압 상승 곡선 분석\n(Voltage Rise Curve Analysis)")
     ax.legend(loc="upper right")
 
-    # Model comparison table
+    # 모델 비교 표
     model_rows = [(v["label"], f"{v['r2']:.3f}", f"{v['aic']:.2f}") for v in models.values()]
     model_rows.sort(key=lambda r: float(r[2]))
     best_flag = ["★ 최적" if r[0] == best["label"] else "" for r in model_rows]
@@ -194,15 +192,14 @@ def _plot_voltage_curve(df, df_anomaly, electrode_label, color, fname):
 def analyze_voltage_curves(df_al, df_c, df_al_clean):
     """
     전압 상승 곡선 분석 메인 함수
-    Main function for voltage rise curve analysis
 
     Parameters:
-    df_al (DataFrame): 알루미늄 데이터 / Aluminum data
-    df_c (DataFrame): 흑연 데이터 / Graphite data
-    df_al_clean (DataFrame): 정제된 알루미늄 데이터 / Cleaned aluminum data
+    df_al (DataFrame): 알루미늄 데이터 
+    df_c (DataFrame): 흑연 데이터 
+    df_al_clean (DataFrame): 정제된 알루미늄 데이터 
 
     Returns:
-    dict: 모델 결과들 / Model results
+    dict: 모델 결과들  
     """
     print("\n=== Analysis 3: Voltage Rise Curve Analysis ===")
 
@@ -213,17 +210,17 @@ def analyze_voltage_curves(df_al, df_c, df_al_clean):
     c_models = _plot_voltage_curve(df_c, None, "흑연 (Graphite)",
                                    COLORS["graphite"], "05_voltage_curve_c.png")
 
-    # Combined time-series
+    # 통합 시계열
     fig, ax = plt.subplots(figsize=(12, 6))
 
-    # Plot Al (with anomaly distinction)
+    # 알루미늄(Al) 데이터: 이상치 구분 시각화
     ax.plot(df_al_clean["elapsed_hours"], df_al_clean["voltage_mV"],
             "o-", color=COLORS["aluminum"], linewidth=2, markersize=7, label="알루미늄 전극")
     if len(df_al_anomaly) > 0:
         ax.scatter(df_al_anomaly["elapsed_hours"], df_al_anomaly["voltage_mV"],
                    color=COLORS["anomaly"], s=100, marker="X", zorder=6, label="이상치 (Al)")
 
-    # 보조 x축에 흑연 플롯: offset이 있는 트윈 축 사용 / Twin axis for graphite plot
+    # 보조 x축에 흑연 플롯: offset이 있는 트윈 축 사용 
     ax2 = ax.twiny()
     ax2.plot(df_c["elapsed_hours"], df_c["voltage_mV"],
              "s-", color=COLORS["graphite"], linewidth=2, markersize=7, label="흑연 전극")
