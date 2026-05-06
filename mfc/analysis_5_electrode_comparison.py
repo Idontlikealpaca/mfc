@@ -15,23 +15,21 @@ from config import COLORS, FIGURES_DIR
 def analyze_electrode_comparison(df_al, df_c, df_al_clean, energy_results):
     """
     전극 효율성 비교 분석 메인 함수
-    Main function for electrode efficiency comparison analysis
-
+    
     Parameters:
-    df_al (DataFrame): 알루미늄 데이터 / Aluminum data
-    df_c (DataFrame): 흑연 데이터 / Graphite data
-    df_al_clean (DataFrame): 정제된 알루미늄 데이터 / Cleaned aluminum data
-    energy_results (dict): 에너지 분석 결과 / Energy analysis results
+    df_al (DataFrame): 알루미늄 데이터 
+    df_c (DataFrame): 흑연 데이터 
+    df_al_clean (DataFrame): 정제된 알루미늄 데이터 
+    energy_results (dict): 에너지 분석 결과 
 
     Returns:
-    dict: 비교 분석 결과 / Comparison analysis results
+    dict: 비교 분석 결과 
     """
-    print("\n=== Analysis 5: Electrode Efficiency Comparison ===")
+    print("\n Analysis 5: Electrode Efficiency Comparison")
 
     def stats_summary(df):
         """
         데이터프레임의 통계 요약 계산
-        Calculate statistical summary of dataframe
         """
         v = df["voltage_mV"].dropna()
         p = df["power_uW"].dropna()
@@ -56,7 +54,7 @@ def analyze_electrode_comparison(df_al, df_c, df_al_clean, energy_results):
           f"max P={c_stats['max_p']:.2f} μW")
     print(f"  Ratios – V: {voltage_ratio:.2f}x, P: {power_ratio:.2f}x, Energy: {energy_ratio:.2f}x")
 
-    # 2×2 막대차트 / 2×2 bar charts
+    # 2×2 막대차트 
     fig, axes = plt.subplots(2, 2, figsize=(12, 9))
     metrics = [
         ("평균 전압 (mV)", al_stats["mean_v"], c_stats["mean_v"], None, axes[0, 0]),
@@ -84,7 +82,7 @@ def analyze_electrode_comparison(df_al, df_c, df_al_clean, energy_results):
     plt.close()
     print("  → Saved: 09_electrode_comparison_bars.png")
 
-    # 저항 vs 전압 산점도 / Resistance vs voltage scatter plot
+    # 저항 vs 전압 산점도 
     fig, ax = plt.subplots(figsize=(9, 6))
     for df, label, marker, color in [
         (df_al_clean, "알루미늄 전극", "o", COLORS["aluminum"]),
