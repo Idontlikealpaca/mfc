@@ -15,9 +15,9 @@ def _pearson_pval_matrix(df_sub):
     cols = df_sub.columns.tolist()
     n = len(cols)
     pmat = pd.DataFrame(np.nan, index=cols, columns=cols)
-    for i, c1 in enumerate(cols):
-        for j, c2 in enumerate(cols):
-            if i == j:
+    for col_x, c1 in enumerate(cols):
+        for col_y, c2 in enumerate(cols):
+            if col_x == col_y:
                 pmat.loc[c1, c2] = 0.0
             else:
                 valid = df_sub[[c1, c2]].dropna()
@@ -49,11 +49,11 @@ def _plot_correlation_heatmap(corr_mat, pval_mat, title, fname):
     # Pearson 상관계수
     ax0 = axes[0]
     annot_p = corr_mat.copy().astype(str)
-    for r in corr_mat.index:
-        for c in corr_mat.columns:
-            val = corr_mat.loc[r, c]
-            star = _sig_stars(pval_mat.loc[r, c]) if r != c else ""
-            annot_p.loc[r, c] = f"{val:.2f}{star}" if not pd.isna(val) else "N/A"
+    for col_x in corr_mat.index:
+        for col_y in corr_mat.columns:
+            val = corr_mat.loc[col_x, col_y]
+            star = _sig_stars(pval_mat.loc[col_x, col_y]) if col_x != col_y else ""
+            annot_p.loc[col_x, col_y] = f"{val:.2f}{star}" if not pd.isna(val) else "N/A"
 
     mask_p = corr_mat.isna()
     sns.heatmap(
@@ -95,11 +95,11 @@ def analyze_correlations(df_al, df_c, df_al_clean):
         for ax, (mat, method) in zip(axes, [(pearson_mat, "Pearson"), (spearman_mat, "Spearman")]):
             pv = pval_mat if method == "Pearson" else pd.DataFrame(np.nan, index=mat.index, columns=mat.columns)
             annot = mat.copy().astype(str)
-            for r in mat.index:
-                for c in mat.columns:
-                    val = mat.loc[r, c]
-                    star = _sig_stars(pv.loc[r, c]) if r != c and method == "Pearson" else ""
-                    annot.loc[r, c] = f"{val:.2f}{star}" if not pd.isna(val) else "N/A"
+            for col_x in mat.index:
+                for col_y in mat.columns:
+                    val = mat.loc[col_x, col_y]
+                    star = _sig_stars(pv.loc[col_x, col_y]) if col_X != col_y and method == "Pearson" else ""
+                    annot.loc[col_X, col_y] = f"{val:.2f}{star}" if not pd.isna(val) else "N/A"
 
             sns.heatmap(
                 mat, ax=ax, annot=annot, fmt="", cmap="RdYlGn", vmin=-1, vmax=1,
